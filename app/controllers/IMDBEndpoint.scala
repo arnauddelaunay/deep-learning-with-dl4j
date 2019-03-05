@@ -2,7 +2,7 @@ package controllers
 
 import play.api.libs.json.Json
 import play.api.mvc.{Action, Controller}
-import resources.{ApiError, IMDBResources}
+import resources.IMDBResources
 
 /**
   * Created by Freddie on 10/06/2017.

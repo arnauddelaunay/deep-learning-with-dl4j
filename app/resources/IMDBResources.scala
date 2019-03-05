@@ -1,24 +1,17 @@
 package resources
 
-import java.awt.image.BufferedImage
 import java.io.File
 
-import com.fasterxml.jackson.core.JsonParseException
 import com.typesafe.config.ConfigFactory
-import com.vogonjeltz.machineInt.lib.{Serialise, Utils}
 import com.vogonjeltz.machineInt.lib.dl4jModels.mnist.MnistModelApplication
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork
 import org.deeplearning4j.util.ModelSerializer
-import org.nd4j.linalg.cpu.nativecpu.NDArray
 import org.nd4j.linalg.indexing.NDArrayIndex
 import play.api.libs.json._
 import resources.sentimentdetection.SentimentExampleIterator
 import resources.sentimentdetection.Word2VecSentimentRNN.{DATA_PATH, WORD_VECTORS_PATH, truncateReviewsToLength}
 
-/**
-  * Created by Freddie on 10/06/2017.
-  */
 object IMDBResources {
 
   lazy val model: MultiLayerNetwork = ModelSerializer.restoreMultiLayerNetwork(ConfigFactory.load().getString("models.folder")+ConfigFactory.load().getString("models.lstm"))
