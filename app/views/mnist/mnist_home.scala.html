@@ -1,0 +1,265 @@
+@()
+
+@main("MNIST") {
+
+    <style>
+
+        .text-red {
+            color:red;
+        }
+        .text-orange {
+            color: orange;
+        }
+        .text-green {
+            color: green;
+        }
+        .text-bold {
+            font-weight: bold;
+        }
+
+        .canvas-area {
+            margin:auto;
+            padding: 0;
+            text-align: center;
+            min-height: 20vw;
+            min-width: 20vw;
+            max-width:80vw;
+            max-height:80vw;
+            width: 40vh;
+            height: 40vh;
+        }
+
+        .center{
+            text-align: center;
+        }
+        #main-canvas {
+            width:100%;
+            height:100%;
+        }
+
+        h1 {
+            font-size: 4vw;
+        }
+
+
+    </style>
+
+    <div class="row center">
+        <div class="col-sm-12">
+            <h1>MNIST Trained Model</h1>
+            <a class="github-button" href="https://github.com/vogon101/MachineLearning/subscription" data-icon="octicon-eye" data-size="large" data-show-count="true" aria-label="Watch vogon101/MachineLearning on GitHub">Watch</a>
+            <a class="github-button" href="https://github.com/vogon101/MachineLearning" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star vogon101/MachineLearning on GitHub">Star</a>
+            <a class="github-button" href="https://github.com/vogon101/MachineLearning/fork" data-icon="octicon-repo-forked" data-size="large" data-show-count="true" aria-label="Fork vogon101/MachineLearning on GitHub">Fork</a>
+            <h3>Handwritten digit recogniser</h3>
+                <div class="canvas-area">
+                    <canvas width="280" height="280" style="border: dashed" id="main-canvas"></canvas><br/>
+                </div><br/>
+                <button onclick="clearArea()">Clear</button>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-sm-12">
+            <h3>That is a <span id="value-rec">-</span></h3>
+            <h3>Confidences</h3>
+            <ul id="probs"></ul>
+            <canvas width="28" height="28" id="destCanv"></canvas>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <h3>Project Information</h3>
+            <p>
+                This project uses Deep Learning for Java (DL4J) to power a simple multi-layered convolutional network. This model has been trained on the MNIST data and achives an accuracy of ~95%
+                with the test set. I used the play framework to make the model accessible via the internet and then HTML5 canvas to allow the user to draw images.
+            </p>
+
+            <p>
+                I have written a short blog post about this project <a href="http://blog.vogonjeltz.com/programming/neural-networks/machine-learning/dl4j/scala/2017/06/09/Neural-Networks-MNIST.html">here</a>.
+            </p>
+
+            <p>
+                To use this example draw a <b>single</b> digit in the box and then click send. <b>On mobile this site only works when the zoom level is 100%.</b>
+            </p>
+
+            <p>
+                All the code is available <a href="https://github.com/vogon101/MachineLearning">here</a>
+            </p>
+
+            <h3>I drew an X and it thought it was a Y</h3>
+
+            <p>
+                This model is not perfect, far from it. In fact, the whole point of this project is to show real machine learning
+                in action and this <i>includes</i> the failures. This model achives 80.2% accuracy on the MNIST test-set which meansit is pretty
+                good on that data but clearly it isnt that good here. The reason for this is because, despite my best attempts
+                to normalise the input, the format is not exactly the same as in the standard data-set. This shows the importance
+                of the right kind of training which is not always that easy.
+            </p>
+
+        </div>
+
+    </div>
+}
+
+<script>
+
+        exampleImage = [0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.20,0.49,0.40,0.20,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.20,0.60,1.00,1.00,1.00,0.80,0.80,0.40,0.20,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.20,0.80,1.00,1.00,1.00,1.00,1.00,1.00,1.00,0.60,0.20,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.20,0.80,1.00,1.00,0.60,0.40,0.40,0.60,0.80,1.00,1.00,0.80,0.20,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.20,0.60,1.00,0.80,0.60,0.00,0.00,0.00,0.00,0.20,0.60,0.80,1.00,0.80,0.20,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.20,0.40,1.00,1.00,0.80,0.20,0.00,0.00,0.00,0.00,0.00,0.20,0.60,1.00,1.00,0.80,0.20,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.20,0.60,1.00,1.00,0.40,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.60,1.00,1.00,0.49,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.20,0.80,0.80,0.80,0.20,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.20,0.80,1.00,0.80,0.20,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.40,0.80,0.80,0.80,0.20,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.49,1.00,0.80,0.20,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.40,1.00,0.80,0.80,0.40,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.40,0.80,1.00,0.40,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.40,0.80,0.80,0.80,0.20,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.40,1.00,1.00,0.40,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.20,0.80,0.80,0.80,0.40,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.49,1.00,0.80,0.40,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.20,0.80,0.80,0.80,0.60,0.20,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.20,0.60,1.00,0.80,0.20,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.20,0.60,1.00,1.00,1.00,0.40,0.20,0.00,0.00,0.00,0.00,0.00,0.00,0.20,1.00,1.00,0.80,0.20,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.20,0.60,0.80,1.00,0.80,0.40,0.00,0.00,0.00,0.00,0.00,0.20,0.60,1.00,1.00,0.40,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.40,0.80,1.00,1.00,1.00,0.60,0.40,0.20,0.20,0.20,0.60,1.00,1.00,0.60,0.20,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.40,0.80,1.00,1.00,1.00,1.00,0.80,0.80,1.00,1.00,1.00,0.80,0.40,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.20,0.40,0.60,0.80,0.80,1.00,1.00,1.00,0.80,0.80,0.20,0.20,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.20,0.40,0.49,0.49,0.49,0.40,0.20,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00]
+
+        function recognise(imageToSend, success) {
+            var s = "[";
+            for (i =0; i < imageToSend.length; i ++) {
+                s = s + imageToSend[i] + (i == imageToSend.length-1 ? "]" : ",")
+            }
+            $.ajax({
+                url: "/MNIST/recognise",
+                data: {
+                    body: "{\"image\":" + s +"}"
+                },
+                method: "POST"
+            }).done(function(r) {
+                success(JSON.parse(r))
+            }).fail(function(e) {
+                alert((JSON.parse(e.responseText).error))
+                console.log("ERROR")
+            })
+        }
+
+        /*recognise(exampleImage, function (r) {
+            console.log(r.recognised)
+        });*/
+
+        var mousePressed = false;
+        var lastX, lastY;
+        var ctx;
+        var width = 20;
+        var canvas = $("#main-canvas");
+        var destCtx = document.getElementById("destCanv").getContext("2d");
+        var canvasElement = document.getElementById("main-canvas")
+
+        var moveTicks = 0
+
+        function InitThis() {
+            destCtx = document.getElementById("destCanv").getContext("2d");
+            ctx = document.getElementById('main-canvas').getContext("2d");
+
+            var mouseDown = function (e) {
+                var pageX = 0
+                var pageY = 0
+                if (e.touches == undefined) {
+                    pageX = e.pageX
+                    pageY = e.pageY
+                } else {
+                    pageX = e.touches[0].pageX
+                    pageY = e.touches[0].pageY
+                }
+                console.log("hello")
+                console.log(e)
+                mousePressed = true;
+                lastX = (pageX - $(this).offset().left) * 280 / canvas.width()
+                lastY = (pageY - $(this).offset().top) * 280 / canvas.width()
+            }
+
+            var mouseMove = function (e) {
+                var pageX,pageY = 0
+
+                if (e.touches == undefined) {
+                    pageX = e.pageX
+                    pageY = e.pageY
+                } else {
+                    pageX = e.touches[0].pageX
+                    pageY = e.touches[0].pageYe
+                }
+                if (mousePressed) {
+                    console.log(e)
+                    moveTicks++
+                    if (moveTicks > 10)
+                        sendImage()
+                    Draw((pageX - $(this).offset().left) * 280 / canvas.width(), (pageY - $(this).offset().top) * 280 / canvas.width(), true);
+                }
+            }
+
+            var mouseLeave =  function (e) {
+                if (mousePressed) {
+                    sendImage()
+                    mousePressed = false;
+                    moveTicks = 0
+                }
+            }
+
+            canvas.on('mousedown', mouseDown);
+            canvas.on('mousemove', mouseMove);
+            canvas.on('mouseup', mouseLeave);
+            canvas.on('mouseleave', mouseLeave);
+
+            canvas.bind('touchstart', mouseDown)
+            canvas.bind('touchend', mouseLeave)
+            canvas.bind('touchmove', mouseMove)
+            canvas.bind('touchleave', mouseLeave)
+
+            clearArea()
+        }
+
+        function Draw(x, y, isDown) {
+            if (isDown) {
+                ctx.beginPath();
+                ctx.strokeStyle = "#000000";
+                ctx.lineWidth = width;
+                ctx.lineJoin = "round";
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(x, y);
+                ctx.closePath();
+                ctx.stroke();
+            }
+            lastX = x; lastY = y;
+        }
+
+        function clearArea() {
+            // Use the identity matrix while clearing the canvas
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, 280, 280);
+        }
+
+
+        function sendImage() {
+
+            moveTicks = 0
+            destCtx.drawImage(canvasElement, 0, 0, 280, 280, 0, 0, 28, 28);
+            imageData = destCtx.getImageData(0,0,28,28);
+            var width  = imageData.width;
+            var height = imageData.height;
+            var data = imageData.data;
+
+            var image = new Float32Array(28*28)
+            for (var p = 0; p < data.length; p+=4) {
+                var x = p / 4 % width;
+                var y = (p / 4 - x) / width;
+                var value = 1 - (data[p] / 256)
+                image[y * 28 + x] = value
+            }
+
+            console.log("Sending Image")
+            imageData = ctx.getImageData(0,0,28,28);
+            console.log(imageData)
+            //ctx.drawImage(canvasElement, 0, 0, 280, 280)
+
+            recognise(image, function (s) {
+                console.log(s);
+                var maxValue = (Math.max.apply(null, s.results) * 100).toFixed(2)
+                $("#value-rec").html(s.recognised + " (" + maxValue + "%)");
+                $("#probs").html("");
+                for (i = 0; i < s.results.length; i++) {
+                    var value = s.results[i];
+                    var colour = "text-black";
+                    if (value > 0.1) colour = "text-red";
+                    if (value > 0.4) colour = "text-orange";
+                    if (value > 0.6) colour = "text-green";
+                    var bold = ""
+                    if (i == s.recognised) bold = "text-bold"
+                    $("#probs").append("<li class='" + colour + " " + bold + "'>" + i + " - " + ((value) * 100).toFixed(2) + "%</li>")
+                }
+            })
+
+        }
+
+
+        InitThis()
+</script>
