@@ -5,8 +5,10 @@ import java.net.URL
 
 import org.apache.commons.io.{FileUtils, FilenameUtils}
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer
-import org.deeplearning4j.nn.conf.layers.{LSTM, RnnOutputLayer}
+import org.deeplearning4j.nn.conf.graph.MergeVertex
+import org.deeplearning4j.nn.conf.layers.{DenseLayer, LSTM, OutputLayer, RnnOutputLayer}
 import org.deeplearning4j.nn.conf.{GradientNormalization, NeuralNetConfiguration}
+import org.deeplearning4j.nn.graph.ComputationGraph
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork
 import org.deeplearning4j.util.ModelSerializer
 import org.deeplearning4j.nn.weights.WeightInit
@@ -14,7 +16,7 @@ import org.deeplearning4j.optimize.listeners.ScoreIterationListener
 import org.nd4j.linalg.activations.Activation
 import org.nd4j.linalg.factory.Nd4j
 import org.nd4j.linalg.indexing.NDArrayIndex
-import org.nd4j.linalg.learning.config.Adam
+import org.nd4j.linalg.learning.config.{Adam, Sgd}
 import org.nd4j.linalg.lossfunctions.LossFunctions
 
 /** Example: Given a movie review (raw text), classify that movie review as either positive or negative based on the words it contains.
@@ -46,8 +48,8 @@ object Word2VecSentimentRNN {
   /** Location to save and extract the training/testing data */
   val DATA_PATH = FilenameUtils.concat(System.getProperty("java.io.tmpdir"), "dl4j_w2vSentiment/")
   /** Location (local file system) for the Google News vectors. Set this manually. */
-  val WORD_VECTORS_PATH = "/home/arnaud/workspace/Devoxx/WebDeepLearning/public/downloads/GoogleNews-vectors-negative300-SLIM.bin.gz"
-  val OUTPUT_PATH = "/home/arnaud/workspace/Devoxx/WebDeepLearning/public/models/lstm2.zip"
+  val WORD_VECTORS_PATH = "public/downloads/GoogleNews-vectors-negative300-SLIM.bin.gz"
+  val OUTPUT_PATH = "public/models/lstm2.zip"
   val truncateReviewsToLength = 256
 
   @throws[Exception]
@@ -59,11 +61,10 @@ object Word2VecSentimentRNN {
     //Number of examples in each minibatch
     val vectorSize = 300
     //Size of the word vectors. 300 in the Google News model
-    val nEpochs = 20
+    val nEpochs = 1
     //Number of epochs (full passes of training data) to train on
     val seed = 0 //Seed for reproducibility
     Nd4j.getMemoryManager.setAutoGcWindow(10000) //https://deeplearning4j.org/workspaces
-
 
     //Set up network configuration
     val conf = new NeuralNetConfiguration.Builder()
@@ -75,7 +76,7 @@ object Word2VecSentimentRNN {
       .gradientNormalizationThreshold(1.0)
       .list()
       .layer(0, new LSTM.Builder()
-        .nIn(vectorSize)
+        .nIn(300)
         .nOut(256)
         .activation(Activation.TANH)
         .build)
