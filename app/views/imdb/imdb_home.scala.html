@@ -31,14 +31,14 @@
         <div class="row">
             <div class="col-md-4 col-sm-12"></div>
             <div class="col-md-4 col-sm-12">
-                <h2>Sentiment  <span id="value-rec"></span> </h2>
+                <h2>Sentiment  <span id="value-rec"></span></h2>
+                <p><i id="value-confidence"></i></p>
             </div>
             <div class="col-md-4 col-sm-12"></div>
         </div>
     }
 
     <script>
-  var exampleText = "this movie is the greatest of all time !";
 
   function recognise(textInput, success) {
       $.ajax({
@@ -55,10 +55,6 @@
       })
   }
 
-  /*recognise(exampleText, function (r) {
-  console.log(r.recognised)
-  });*/
-
   var textInput = document.getElementById("review-input");
 
   function InitThis() {
@@ -74,7 +70,8 @@
       recognise(textInput.value, function (s) {
           console.log(s);
           var maxValue = (Math.max.apply(null, s.results) * 100).toFixed(2);
-          $("#value-rec").html(s.recognised + " (confidence : " + maxValue + "%)");
+          $("#value-rec").html(s.recognised);
+          $("#value-confidence").html("confidence : " + maxValue + "%");
           if (s.recognised === smileys[0]) {
               $("#review-input").css("background-color", "#90EE90");
           } else {
