@@ -5,18 +5,16 @@ import java.net.URL
 
 import org.apache.commons.io.{FileUtils, FilenameUtils}
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer
-import org.deeplearning4j.nn.conf.graph.MergeVertex
-import org.deeplearning4j.nn.conf.layers.{DenseLayer, LSTM, OutputLayer, RnnOutputLayer}
+import org.deeplearning4j.nn.conf.layers.{LSTM, RnnOutputLayer}
 import org.deeplearning4j.nn.conf.{GradientNormalization, NeuralNetConfiguration}
-import org.deeplearning4j.nn.graph.ComputationGraph
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork
-import org.deeplearning4j.util.ModelSerializer
 import org.deeplearning4j.nn.weights.WeightInit
 import org.deeplearning4j.optimize.listeners.ScoreIterationListener
+import org.deeplearning4j.util.ModelSerializer
 import org.nd4j.linalg.activations.Activation
 import org.nd4j.linalg.factory.Nd4j
 import org.nd4j.linalg.indexing.NDArrayIndex
-import org.nd4j.linalg.learning.config.{Adam, Sgd}
+import org.nd4j.linalg.learning.config.Adam
 import org.nd4j.linalg.lossfunctions.LossFunctions
 
 /** Example: Given a movie review (raw text), classify that movie review as either positive or negative based on the words it contains.
@@ -75,11 +73,14 @@ object Word2VecSentimentRNN {
       .gradientNormalization(GradientNormalization.ClipElementWiseAbsoluteValue)
       .gradientNormalizationThreshold(1.0)
       .list()
-      .layer(0, new LSTM.Builder()
-        .nIn(300)
-        .nOut(256)
-        .activation(Activation.TANH)
-        .build)
+      .layer(
+        0,
+        new LSTM.Builder()
+          .nIn(300)
+          .nOut(256)
+          .activation(Activation.TANH)
+          .build
+      )
       .layer(1, new RnnOutputLayer.Builder()
         .activation(Activation.SOFTMAX)
         .lossFunction(LossFunctions.LossFunction.MCXENT)

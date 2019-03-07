@@ -3,7 +3,6 @@ package resources
 import java.io.File
 
 import com.typesafe.config.ConfigFactory
-import com.vogonjeltz.machineInt.lib.dl4jModels.mnist.MnistModelApplication
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork
 import org.deeplearning4j.util.ModelSerializer
@@ -14,8 +13,7 @@ import resources.sentimentdetection.Word2VecSentimentRNN.{DATA_PATH, WORD_VECTOR
 
 object IMDBResources {
 
-  lazy val model: MultiLayerNetwork = ModelSerializer.restoreMultiLayerNetwork(ConfigFactory.load().getString("models.folder")+ConfigFactory.load().getString("models.lstm"))
-  lazy val app = new MnistModelApplication(model)
+  val model: MultiLayerNetwork = ModelSerializer.restoreMultiLayerNetwork(ConfigFactory.load().getString("models.folder")+ConfigFactory.load().getString("models.lstm"))
   val wordVectors = WordVectorSerializer.loadStaticModel(new File(WORD_VECTORS_PATH))
   val test = new SentimentExampleIterator(DATA_PATH, wordVectors, 1, truncateReviewsToLength, false)
 

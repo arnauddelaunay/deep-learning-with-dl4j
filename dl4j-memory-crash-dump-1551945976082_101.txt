@@ -1,0 +1,142 @@
+Deeplearning4j OOM Exception Encountered for MultiLayerNetwork
+Timestamp:                              2019-03-07 09:06:16.082
+Thread ID                               101
+Thread Name                             application-akka.actor.default-dispatcher-9
+
+
+Stack Trace:
+java.lang.OutOfMemoryError: Cannot allocate new FloatPointer(65536): totalBytes = 703M, physicalBytes = 1929M
+	at org.bytedeco.javacpp.FloatPointer.<init>(FloatPointer.java:76)
+	at org.nd4j.linalg.api.buffer.BaseDataBuffer.<init>(BaseDataBuffer.java:610)
+	at org.nd4j.linalg.api.buffer.FloatBuffer.<init>(FloatBuffer.java:54)
+	at org.nd4j.linalg.api.buffer.factory.DefaultDataBufferFactory.createFloat(DefaultDataBufferFactory.java:256)
+	at org.nd4j.linalg.factory.Nd4j.createBuffer(Nd4j.java:1500)
+	at org.nd4j.linalg.api.ndarray.BaseNDArray.detach(BaseNDArray.java:6004)
+	at org.nd4j.linalg.workspace.BaseWorkspaceMgr.leverageTo(BaseWorkspaceMgr.java:186)
+	at org.deeplearning4j.nn.workspace.LayerWorkspaceMgr.leverageTo(LayerWorkspaceMgr.java:78)
+	at org.deeplearning4j.util.TimeSeriesUtils.reshape3dTo2d(TimeSeriesUtils.java:181)
+	at org.deeplearning4j.nn.layers.recurrent.RnnOutputLayer.activate(RnnOutputLayer.java:130)
+	at org.deeplearning4j.nn.layers.BaseOutputLayer.activate(BaseOutputLayer.java:213)
+	at org.deeplearning4j.nn.multilayer.MultiLayerNetwork.outputOfLayerDetached(MultiLayerNetwork.java:1211)
+	at org.deeplearning4j.nn.multilayer.MultiLayerNetwork.output(MultiLayerNetwork.java:2293)
+	at org.deeplearning4j.nn.multilayer.MultiLayerNetwork.output(MultiLayerNetwork.java:2256)
+	at org.deeplearning4j.nn.multilayer.MultiLayerNetwork.output(MultiLayerNetwork.java:2248)
+	at org.deeplearning4j.nn.multilayer.MultiLayerNetwork.output(MultiLayerNetwork.java:2229)
+	at org.deeplearning4j.nn.multilayer.MultiLayerNetwork.output(MultiLayerNetwork.java:2329)
+	at resources.IMDBResources$.recognise(IMDBResources.scala:28)
+	at controllers.IMDBEndpoint$$anonfun$recognise$1.apply(IMDBEndpoint.scala:22)
+	at controllers.IMDBEndpoint$$anonfun$recognise$1.apply(IMDBEndpoint.scala:18)
+	at play.api.mvc.ActionBuilder$$anonfun$apply$13.apply(Action.scala:371)
+	at play.api.mvc.ActionBuilder$$anonfun$apply$13.apply(Action.scala:370)
+	at play.api.mvc.Action$.invokeBlock(Action.scala:498)
+	at play.api.mvc.Action$.invokeBlock(Action.scala:495)
+	at play.api.mvc.ActionBuilder$$anon$2.apply(Action.scala:458)
+	at play.api.mvc.Action$$anonfun$apply$2$$anonfun$apply$5$$anonfun$apply$6.apply(Action.scala:112)
+	at play.api.mvc.Action$$anonfun$apply$2$$anonfun$apply$5$$anonfun$apply$6.apply(Action.scala:112)
+	at play.utils.Threads$.withContextClassLoader(Threads.scala:21)
+	at play.api.mvc.Action$$anonfun$apply$2$$anonfun$apply$5.apply(Action.scala:111)
+	at play.api.mvc.Action$$anonfun$apply$2$$anonfun$apply$5.apply(Action.scala:110)
+	at scala.Option.map(Option.scala:146)
+	at play.api.mvc.Action$$anonfun$apply$2.apply(Action.scala:110)
+	at play.api.mvc.Action$$anonfun$apply$2.apply(Action.scala:103)
+	at scala.concurrent.Future$$anonfun$flatMap$1.apply(Future.scala:253)
+	at scala.concurrent.Future$$anonfun$flatMap$1.apply(Future.scala:251)
+	at scala.concurrent.impl.CallbackRunnable.run(Promise.scala:36)
+	at akka.dispatch.BatchingExecutor$AbstractBatch.processBatch(BatchingExecutor.scala:55)
+	at akka.dispatch.BatchingExecutor$BlockableBatch$$anonfun$run$1.apply$mcV$sp(BatchingExecutor.scala:91)
+	at akka.dispatch.BatchingExecutor$BlockableBatch$$anonfun$run$1.apply(BatchingExecutor.scala:91)
+	at akka.dispatch.BatchingExecutor$BlockableBatch$$anonfun$run$1.apply(BatchingExecutor.scala:91)
+	at scala.concurrent.BlockContext$.withBlockContext(BlockContext.scala:72)
+	at akka.dispatch.BatchingExecutor$BlockableBatch.run(BatchingExecutor.scala:90)
+	at akka.dispatch.TaskInvocation.run(AbstractDispatcher.scala:39)
+	at akka.dispatch.ForkJoinExecutorConfigurator$AkkaForkJoinTask.exec(AbstractDispatcher.scala:409)
+	at scala.concurrent.forkjoin.ForkJoinTask.doExec(ForkJoinTask.java:260)
+	at scala.concurrent.forkjoin.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1339)
+	at scala.concurrent.forkjoin.ForkJoinPool.runWorker(ForkJoinPool.java:1979)
+	at scala.concurrent.forkjoin.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:107)
+Caused by: java.lang.OutOfMemoryError: Physical memory usage is too high: physicalBytes (1929M) > maxPhysicalBytes (1913M)
+	at org.bytedeco.javacpp.Pointer.deallocator(Pointer.java:584)
+	at org.bytedeco.javacpp.Pointer.init(Pointer.java:124)
+	at org.bytedeco.javacpp.FloatPointer.allocateArray(Native Method)
+	at org.bytedeco.javacpp.FloatPointer.<init>(FloatPointer.java:68)
+	... 47 more
+
+
+========== Memory Information ==========
+----- Version Information -----
+Deeplearning4j Version                  1.0.0-beta3
+Deeplearning4j CUDA                     <not present>
+
+----- System Information -----
+Operating System                        GNU/Linux Ubuntu 14.04.5 LTS
+CPU                                     Intel(R) Core(TM) i5-5200U CPU @ 2.20GHz
+CPU Cores - Physical                    2
+CPU Cores - Logical                     4
+Total System Memory                        7.70 GB (8269811712)
+
+----- ND4J Environment Information -----
+Data Type                               FLOAT
+backend                                 CPU
+blas.vendor                             MKL
+os                                      Linux
+
+----- Memory Configuration -----
+JVM Memory: XMX                          977.50 MB (1024983040)
+JVM Memory: current                      977.50 MB (1024983040)
+JavaCPP Memory: Max Bytes                956.50 MB (1002962944)
+JavaCPP Memory: Max Physical               1.87 GB (2005925888)
+JavaCPP Memory: Current Bytes            703.67 MB (737850369)
+JavaCPP Memory: Current Physical           1.89 GB (2030391296)
+Periodic GC Enabled                     false
+
+----- Workspace Information -----
+Workspaces: # for current thread        4
+Current thread workspaces:
+  Name                      State       Size                          # Cycles            
+  WS_LAYER_WORKING_MEM      CLOSED             0 B                    2                   
+  WS_LAYER_ACT_2            CLOSED             0 B                    1                   
+  WS_RNN_LOOP_WORKING_MEM   CLOSED         7.71 KB (7896)             256                 
+  WS_LAYER_ACT_1            CLOSED             0 B                    1                   
+Workspaces total size                      7.71 KB (7896)
+
+----- Network Information -----
+Network # Parameters                    570882
+Parameter Memory                           2.18 MB (2283528)
+Parameter Gradients Memory                 2.18 MB (2283528)
+Updater Number of Elements              1141764
+Updater Memory                             4.36 MB (4567056)
+Updater Classes:
+  org.nd4j.linalg.learning.AdamUpdater
+Params + Gradient + Updater Memory         6.53 MB (6850584)
+Iteration Count                         3920
+Epoch Count                             20
+Backprop Type                           Standard
+Workspace Mode: Training                ENABLED
+Workspace Mode: Inference               ENABLED
+Number of Layers                        2
+Layer Counts
+  LSTM                                    1
+  RnnOutputLayer                          1
+Layer Parameter Breakdown
+  Idx Name                 Layer Type           Layer # Parameters   Layer Parameter Memory
+  0   layer0               LSTM                 570368                  2.18 MB (2281472)
+  1   layer1               RnnOutputLayer       514                     2.01 KB (2056)   
+
+----- Layer Helpers - Memory Use -----
+Total Helper Count                      0
+Helper Count w/ Memory                  0
+Total Helper Persistent Memory Use             0 B
+
+----- Network Activations: Inferred Activation Shapes -----
+Current Minibatch Size                  1
+Input Shape                             [1, 300, 256]
+Idx Name                 Layer Type           Activations Type                           Activations Shape    # Elements   Memory      
+0   layer0               LSTM                 InputTypeRecurrent(256,timeSeriesLength=256) [1, 256, 256]        65536            256 KB (262144)
+1   layer1               RnnOutputLayer       InputTypeRecurrent(2,timeSeriesLength=256) [1, 2, 256]          512                2 KB (2048)
+Total Activations Memory                    258 KB (264192)
+Total Activations Memory (per ex)           258 KB (264192)
+Total Activation Gradient Mem.              556 KB (569344)
+Total Activation Gradient Mem. (per ex)     556 KB (569344)
+
+----- Network Training Listeners -----
+Number of Listeners                     0

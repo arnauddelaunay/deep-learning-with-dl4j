@@ -4,45 +4,15 @@
 
         <style>
 
-                .text-red {
-                    color: red;
-                }
-
-                .text-orange {
-                    color: orange;
-                }
-
-                .text-green {
-                    color: green;
-                }
-
-                .text-bold {
-                    font-weight: bold;
-                }
-
-                .canvas-area {
-                    margin: auto;
-                    padding: 0;
-                    text-align: center;
-                    min-height: 20vw;
-                    min-width: 20vw;
-                    max-width: 80vw;
-                    max-height: 80vw;
-                    width: 40vh;
-                    height: 40vh;
-                }
-
-                .center {
-                    text-align: center;
-                }
-
-                #main-canvas {
-                    width: 100%;
-                    height: 100%;
-                }
-
                 h1 {
                     font-size: 4vw;
+                }
+
+                input {
+                    width: 100%;
+                    font-size: 40px;
+                    border: none;
+                    border-bottom: 2px solid grey;
                 }
 
 
@@ -64,19 +34,6 @@
                 <h3>Confidences</h3>
                 <ul id="probs"></ul>
                 <canvas width="28" height="28" id="destCanv"></canvas>
-            </div>
-            <div class="col-md-6 col-sm-12">
-                <h3>Project Information</h3>
-                <p>
-                    This project uses Deep Learning for Java (DL4J) to power a simple multi-layered recurrent network. This model has been trained on the IMDB Reviews data.
-                    I forked a <a href="https://github.com/vogon101/MachineLearning">github project</a>
-                    to use the play framework to make the model accessible via the internet.
-                </p>
-
-                <p>
-                    All the code is available <a href="https://github.com/arnauddelaunay/devoxx-dl4J-demo">here</a>
-                </p>
-
             </div>
 
         </div>
@@ -120,6 +77,11 @@
           console.log(s);
           var maxValue = (Math.max.apply(null, s.results) * 100).toFixed(2);
           $("#value-rec").html(s.recognised + " (" + maxValue + "%)");
+          if (s.recognised === ":-)") {
+              $("#review-input").css("background-color", "green");
+          } else {
+              $("#review-input").css("background-color", "red");
+          }
           $("#probs").html("");
           for (i = 0; i < s.results.length; i++) {
               var value = s.results[i];
