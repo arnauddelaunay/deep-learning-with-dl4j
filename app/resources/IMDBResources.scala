@@ -30,7 +30,7 @@ object IMDBResources {
     val probabilitiesAtLastWord = networkOutput.get(NDArrayIndex.point(0), NDArrayIndex.all, NDArrayIndex.point(timeSeriesLength - 1))
     val pos = probabilitiesAtLastWord.getDouble(0.asInstanceOf[Long])
     val neg = probabilitiesAtLastWord.getDouble(1.asInstanceOf[Long])
-    val result = if (pos > neg) { ":-)" } else { ":-(" }
+    val result = if (pos > neg) { "😃" } else { "😞" }
     (result, Array(pos, neg))
   }
 
