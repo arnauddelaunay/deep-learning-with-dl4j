@@ -8,8 +8,8 @@ import org.deeplearning4j.nn.multilayer.MultiLayerNetwork
 import org.deeplearning4j.util.ModelSerializer
 import org.nd4j.linalg.indexing.NDArrayIndex
 import play.api.libs.json._
-import resources.sentimentdetection.SentimentExampleIterator
-import resources.sentimentdetection.Word2VecSentimentRNN.{DATA_PATH, WORD_VECTORS_PATH, truncateReviewsToLength}
+import sentimentdetectionmodel.TrainMain.{DATA_PATH, WORD_VECTORS_PATH, truncateReviewsToLength}
+import sentimentdetectionmodel.preprocessing.SentimentExampleIterator
 
 object IMDBResources {
 

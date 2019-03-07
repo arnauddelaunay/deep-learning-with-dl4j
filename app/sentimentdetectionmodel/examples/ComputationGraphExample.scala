@@ -1,4 +1,4 @@
-package resources.sentimentdetection
+package sentimentdetectionmodel.examples
 
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration
 import org.deeplearning4j.nn.conf.graph.MergeVertex

@@ -29,13 +29,11 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6 col-sm-12">
-                <h3><span id="value-rec">-</span></h3>
-                <h3>Confidences</h3>
-                <ul id="probs"></ul>
-                <canvas width="28" height="28" id="destCanv"></canvas>
+            <div class="col-md-4 col-sm-12"></div>
+            <div class="col-md-4 col-sm-12">
+                <h2>Sentiment  <span id="value-rec"></span> </h2>
             </div>
-
+            <div class="col-md-4 col-sm-12"></div>
         </div>
     }
 
@@ -76,20 +74,11 @@
       recognise(textInput.value, function (s) {
           console.log(s);
           var maxValue = (Math.max.apply(null, s.results) * 100).toFixed(2);
-          $("#value-rec").html(s.recognised + " (" + maxValue + "%)");
+          $("#value-rec").html(s.recognised + " (confidence : " + maxValue + "%)");
           if (s.recognised === smileys[0]) {
               $("#review-input").css("background-color", "#90EE90");
           } else {
               $("#review-input").css("background-color", "#F08080");
-          }
-          $("#probs").html("");
-          for (i = 0; i < s.results.length; i++) {
-              var value = s.results[i];
-              var colour = "text-black";
-              if (value > 0.6) colour = "text-green";
-              var bold = "";
-              if (smileys[i] === s.recognised) bold = "text-bold";
-              $("#probs").append("<li class='" + colour + " " + bold + "'>" + smileys[i] + " - " + ((value) * 100).toFixed(2) + "%</li>")
           }
       })
 

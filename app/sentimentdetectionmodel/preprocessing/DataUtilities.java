@@ -1,4 +1,4 @@
-package resources.sentimentdetection;
+package sentimentdetectionmodel.preprocessing;
 
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
