@@ -16,6 +16,7 @@ import org.deeplearning4j.nn.multilayer.MultiLayerNetwork
 import org.deeplearning4j.nn.weights.WeightInit
 import org.deeplearning4j.optimize.listeners.PerformanceListener
 import org.deeplearning4j.ui.api.UIServer
+import org.deeplearning4j.ui.play.PlayUIServer
 import org.deeplearning4j.ui.stats.StatsListener
 import org.deeplearning4j.ui.storage.InMemoryStatsStorage
 import org.deeplearning4j.util.ModelSerializer
@@ -91,11 +92,14 @@ object TrainMainSolution {
     /////////                                                              /////////
     ////////////////////////////////////////////////////////////////////////////////
 
-    /*val remoteUIRouter = new RemoteUIStatsStorageRouter("http://127.0.0.1:9001")
+
+    val uiServer = UIServer.getInstance
+    val statsStorage = new InMemoryStatsStorage()
+    uiServer.attach(statsStorage)
     net.setListeners(
-      new StatsListener(remoteUIRouter),
+      new StatsListener(statsStorage),
       new PerformanceListener(5)
-    )*/
+    )
 
     ////////////////////////////////////////////////////////////////////////////////
     /////////                                                              /////////
