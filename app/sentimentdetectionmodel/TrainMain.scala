@@ -32,9 +32,6 @@ object TrainMain {
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
-    if (WORD_VECTORS_PATH.startsWith("/PATH/TO/YOUR/VECTORS/")) throw new RuntimeException("Please set the WORD_VECTORS_PATH before running this example")
-    downloadData()
-
     val batchSize = 128
     val vectorSize = 300
     val nEpochs = 1
@@ -57,28 +54,6 @@ object TrainMain {
     /////////                                                              /////////
     ////////////////////////////////////////////////////////////////////////////////
 
-    val conf = new NeuralNetConfiguration.Builder()
-      .seed(seed)
-      .updater(new Adam(1e-5))
-      .l2(1e-3)
-      .weightInit(WeightInit.XAVIER)
-      .list()
-      .layer(0, new LSTM.Builder()
-          .nIn(vectorSize)
-          .nOut(256)
-          .activation(Activation.TANH)
-        .build)
-      .layer(1, new RnnOutputLayer.Builder()
-          .nIn(256)
-          .nOut(2)
-          .activation(Activation.SOFTMAX)
-          .lossFunction(LossFunctions.LossFunction.MCXENT)
-          .build
-      )
-      .build
-
-    val network = new MultiLayerNetwork(conf)
-    network.init()
 
 
 
@@ -91,15 +66,12 @@ object TrainMain {
 
 
 
-
-
     ////////////////////////////////////////////////////////////////////////////////
     /////////                                                              /////////
     /////////                         TRAINING                             /////////
     /////////                                                              /////////
     ////////////////////////////////////////////////////////////////////////////////
 
-    network.fit(train)
 
 
 
@@ -113,26 +85,4 @@ object TrainMain {
 
   }
 
-  @throws[Exception]
-  def downloadData(): Unit = { //Create directory if required
-    val directory = new File(DATA_PATH)
-    if (!directory.exists) directory.mkdir
-    //Download file:
-    val archizePath = DATA_PATH + "aclImdb_v1.tar.gz"
-    val archiveFile = new File(archizePath)
-    val extractedPath = DATA_PATH + "aclImdb"
-    val extractedFile = new File(extractedPath)
-    if (!archiveFile.exists) {
-      println("Starting data download (80MB)...")
-      FileUtils.copyURLToFile(new URL(DATA_URL), archiveFile)
-      println("Data (.tar.gz file) downloaded to " + archiveFile.getAbsolutePath)
-      //Extract tar.gz file to output directory
-      DataUtilities.extractTarGz(archizePath, DATA_PATH)
-    }
-    else { //Assume if archive (.tar.gz) exists, then data has already been extracted
-      println("Data (.tar.gz file) already exists at " + archiveFile.getAbsolutePath)
-      if (!extractedFile.exists) DataUtilities.extractTarGz(archizePath, DATA_PATH)
-      else println("Data (extracted) already exists at " + extractedFile.getAbsolutePath)
-    }
-  }
 }
