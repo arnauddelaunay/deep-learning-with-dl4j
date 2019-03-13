@@ -4,16 +4,20 @@ import java.io.File
 import java.net.URL
 
 import org.apache.commons.io.{FileUtils, FilenameUtils}
+import org.deeplearning4j.api.storage.impl.RemoteUIStatsStorageRouter
 import org.deeplearning4j.earlystopping.EarlyStoppingConfiguration
 import org.deeplearning4j.earlystopping.scorecalc.DataSetLossCalculator
 import org.deeplearning4j.earlystopping.termination.{MaxEpochsTerminationCondition, ScoreImprovementEpochTerminationCondition}
 import org.deeplearning4j.earlystopping.trainer.EarlyStoppingTrainer
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer
+import org.deeplearning4j.nn.conf.NeuralNetConfiguration
 import org.deeplearning4j.nn.conf.layers.{LSTM, RnnOutputLayer}
-import org.deeplearning4j.nn.conf.{GradientNormalization, NeuralNetConfiguration}
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork
 import org.deeplearning4j.nn.weights.WeightInit
-import org.deeplearning4j.optimize.listeners.ScoreIterationListener
+import org.deeplearning4j.optimize.listeners.PerformanceListener
+import org.deeplearning4j.ui.api.UIServer
+import org.deeplearning4j.ui.stats.StatsListener
+import org.deeplearning4j.ui.storage.InMemoryStatsStorage
 import org.deeplearning4j.util.ModelSerializer
 import org.nd4j.linalg.activations.Activation
 import org.nd4j.linalg.factory.Nd4j
@@ -22,7 +26,7 @@ import org.nd4j.linalg.lossfunctions.LossFunctions
 import sentimentdetectionmodel.preprocessing.{DataUtilities, SentimentExampleIterator}
 
 
-object TrainMain {
+object TrainMainSolution {
 
   val DATA_URL = "http://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz"
   val DATA_PATH = FilenameUtils.concat(System.getProperty("java.io.tmpdir"), "dl4j_w2vSentiment/")
@@ -59,28 +63,39 @@ object TrainMain {
 
     val conf = new NeuralNetConfiguration.Builder()
       .seed(seed)
-      .updater(new Adam(1e-5))
-      .l2(1e-3)
+      .updater(new Adam(5e-3))
+      .l2(1e-5)
       .weightInit(WeightInit.XAVIER)
-      .list()
+      .list
       .layer(0, new LSTM.Builder()
-          .nIn(vectorSize)
-          .nOut(256)
-          .activation(Activation.TANH)
-        .build)
-      .layer(1, new RnnOutputLayer.Builder()
-          .nIn(256)
-          .nOut(2)
-          .activation(Activation.SOFTMAX)
-          .lossFunction(LossFunctions.LossFunction.MCXENT)
-          .build
+                    .nIn(vectorSize)
+                    .nOut(256)
+                    .activation(Activation.TANH)
+                    .build
       )
-      .build
+      .layer(1, new RnnOutputLayer.Builder()
+                    .activation(Activation.SOFTMAX)
+                    .lossFunction(LossFunctions.LossFunction.MCXENT)
+                    .nIn(256)
+                    .nOut(2)
+                    .build
+      ).build
 
-    val network = new MultiLayerNetwork(conf)
-    network.init()
+    val net = new MultiLayerNetwork(conf)
+    net.init()
 
 
+    ////////////////////////////////////////////////////////////////////////////////
+    /////////                                                              /////////
+    /////////                         LISTENERS                            /////////
+    /////////                                                              /////////
+    ////////////////////////////////////////////////////////////////////////////////
+
+    /*val remoteUIRouter = new RemoteUIStatsStorageRouter("http://127.0.0.1:9001")
+    net.setListeners(
+      new StatsListener(remoteUIRouter),
+      new PerformanceListener(5)
+    )*/
 
     ////////////////////////////////////////////////////////////////////////////////
     /////////                                                              /////////
@@ -89,8 +104,14 @@ object TrainMain {
     ////////////////////////////////////////////////////////////////////////////////
 
 
-
-
+    val earlyStopConf = new EarlyStoppingConfiguration.Builder[MultiLayerNetwork]()
+      .epochTerminationConditions(
+        new MaxEpochsTerminationCondition(100),
+        new ScoreImprovementEpochTerminationCondition(5, 5e-7))
+      .scoreCalculator(new DataSetLossCalculator(test, true))
+      .evaluateEveryNEpochs(1)
+      .build
+    val trainer = new EarlyStoppingTrainer(earlyStopConf, net, train)
 
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -98,9 +119,7 @@ object TrainMain {
     /////////                         TRAINING                             /////////
     /////////                                                              /////////
     ////////////////////////////////////////////////////////////////////////////////
-
-    network.fit(train)
-
+    val bestModel = trainer.fit().getBestModel
 
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -108,9 +127,7 @@ object TrainMain {
     /////////                        PERSISTENCE                           /////////
     /////////                                                              /////////
     ////////////////////////////////////////////////////////////////////////////////
-
-
-
+    ModelSerializer.writeModel(bestModel, OUTPUT_PATH, true)
   }
 
   @throws[Exception]
