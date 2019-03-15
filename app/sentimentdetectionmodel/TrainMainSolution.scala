@@ -85,14 +85,13 @@ object TrainMainSolution {
     val net = new MultiLayerNetwork(conf)
     net.init()
 
-
     ////////////////////////////////////////////////////////////////////////////////
     /////////                                                              /////////
     /////////                         LISTENERS                            /////////
     /////////                                                              /////////
     ////////////////////////////////////////////////////////////////////////////////
 
-
+    /*
     val uiServer = UIServer.getInstance
     val statsStorage = new InMemoryStatsStorage()
     uiServer.attach(statsStorage)
@@ -100,7 +99,7 @@ object TrainMainSolution {
       new StatsListener(statsStorage),
       new PerformanceListener(5)
     )
-
+    */
     ////////////////////////////////////////////////////////////////////////////////
     /////////                                                              /////////
     /////////                      EARLY STOPPING                          /////////
