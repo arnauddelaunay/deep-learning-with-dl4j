@@ -1,1 +1,15 @@
 # DEVOXX - Tools in Action - DL4J Demo
+
+## Install
+
+1. Compile and download dependencies with Maven : `mvn clean install`
+2. Download data into a _data_ directory at the root of the project (from [here](https://drive.google.com/open?id=1TJthiLVTSVS_kAT_bOEptBd2AvzpV1GK))
+
+## Webapp
+
+To run the webapp, simply execute `mvn play2:run -pl my-application-play`
+
+## Train a model
+
+Launch _TrainMainSolution_ from package `com.example.myapplication.core`
+

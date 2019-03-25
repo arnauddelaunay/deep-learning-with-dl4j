@@ -1,0 +1,88 @@
+@()
+
+@main("IMDB") {
+
+    <style>
+
+            h1 {
+                font-size: 4vw;
+            }
+
+            input {
+                width: 100%;
+                font-size: 40px;
+                border: none;
+                border-bottom: 2px solid grey;
+            }
+
+
+    </style>
+
+    <div class="row center">
+        <div class="col-sm-12">
+            <h1>IMDB Reviews Trained Model</h1>
+            <h3>Movie Reviews Sentiment Analysis</h3>
+            <form>
+                Make your own review : <input id="review-input" type="text" label="review"/>
+            </form>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 col-sm-12"></div>
+        <div class="col-md-4 col-sm-12">
+            <h2>Sentiment  <span id="value-rec"></span></h2>
+            <p><i id="value-confidence"></i></p>
+        </div>
+        <div class="col-md-4 col-sm-12"></div>
+    </div>
+}
+
+<script>
+
+        function recognise(textInput, success) {
+            $.ajax({
+                url: "/IMDB/recognise",
+                data: {
+                    body: "{\"review\":\"" + textInput + "\"}"
+                },
+                method: "POST"
+            }).done(function (r) {
+                success(JSON.parse(r))
+            }).fail(function (e) {
+                alert((JSON.parse(e.responseText).error));
+                console.log("ERROR")
+            })
+        }
+
+        var textInput = document.getElementById("review-input");
+
+        function InitThis() {
+            textInput = document.getElementById("review-input");
+        }
+
+        function sendReview() {
+
+            console.log("Sending Review");
+            console.log(textInput.value);
+            var smileys = ["😃", "😞"];
+
+            recognise(textInput.value, function (s) {
+                console.log(s);
+                var maxValue = (Math.max.apply(null, s.results) * 100).toFixed(2);
+                $("#value-rec").html(s.recognised);
+                $("#value-confidence").html("confidence : " + maxValue + "%");
+                if (s.recognised === smileys[0]) {
+                    $("#review-input").css("background-color", "#90EE90");
+                } else {
+                    $("#review-input").css("background-color", "#F08080");
+                }
+            })
+
+        }
+
+        $("#review-input").on("change paste keyup", sendReview);
+
+
+        InitThis()
+</script>
