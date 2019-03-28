@@ -7,9 +7,13 @@
 
 ## Webapp
 
-To run the webapp, simply execute `mvn play2:run -pl my-application-play`
+To run the webapp, simply execute `mvn play2:run -pl webapp`
+
+![alt text][webappScreenshot]
+
+[webappScreenshot]: webapp/public/images/screenshot.png
 
 ## Train a model
 
-Launch _TrainMainSolution_ from package `com.example.myapplication.core`
+Launch _TrainMainSolution_ from package `devoxx.dl4j.core.trainer`
 
