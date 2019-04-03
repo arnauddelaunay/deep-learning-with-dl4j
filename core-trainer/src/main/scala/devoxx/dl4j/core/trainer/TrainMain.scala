@@ -33,7 +33,7 @@ import org.deeplearning4j.ui.storage.InMemoryStatsStorage
 
 object TrainMain {
 
-  val OUTPUT_PATH: String = Constants.modelsPath + Constants.modelVersion
+  val OUTPUT_PATH: String = Constants.modelsPath + Constants.modelVersion + "test"
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -87,6 +87,7 @@ object TrainMain {
     ////////////////////////////////////////////////////////////////////////////////
 
 
+    ModelSerializer.writeModel(bestModel, OUTPUT_PATH, true)
 
   }
 

@@ -90,8 +90,7 @@ object TrainMainSolution {
     val statsStorage = new InMemoryStatsStorage()
     uiServer.attach(statsStorage)
     net.setListeners(
-      new StatsListener(statsStorage),
-      new PerformanceListener(5)
+        new StatsListener(statsStorage)
     )
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -99,15 +98,14 @@ object TrainMainSolution {
     /////////                      EARLY STOPPING                          /////////
     /////////                                                              /////////
     ////////////////////////////////////////////////////////////////////////////////
-
-
     val earlyStopConf = new EarlyStoppingConfiguration.Builder[MultiLayerNetwork]()
-      .epochTerminationConditions(
-        new MaxEpochsTerminationCondition(100),
-        new ScoreImprovementEpochTerminationCondition(5, 5e-7))
-      .scoreCalculator(new DataSetLossCalculator(test, true))
-      .evaluateEveryNEpochs(1)
-      .build
+          .epochTerminationConditions(
+            new MaxEpochsTerminationCondition(100),
+            new ScoreImprovementEpochTerminationCondition(5, 5e-7))
+          .scoreCalculator(new DataSetLossCalculator(test, true))
+          .evaluateEveryNEpochs(1)
+          .build
+
     val trainer = new EarlyStoppingTrainer(earlyStopConf, net, train)
 
     ////////////////////////////////////////////////////////////////////////////////
