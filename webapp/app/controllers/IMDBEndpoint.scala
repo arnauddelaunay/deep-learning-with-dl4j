@@ -5,10 +5,6 @@ import play.api.mvc.{Action, Controller}
 
 import devoxx.dl4j.core.predictor.Predict
 
-
-/**
-  * Created by Freddie on 10/06/2017.
-  */
 object IMDBEndpoint extends Controller {
 
   def index = Action {
