@@ -17,3 +17,12 @@ To run the webapp, simply execute `mvn play2:run -pl webapp`
 
 Launch _TrainMainSolution_ from package `devoxx.dl4j.core.trainer`
 
+## Download Data
+
+```bash
+# apt install npm
+npm install -g ndjson-cli
+source filter_ndjson.sh
+
+```
+

@@ -1,0 +1,10 @@
+sun
+ladder
+airplane
+table
+chair
+snake
+star
+cup
+cat
+bicycle
