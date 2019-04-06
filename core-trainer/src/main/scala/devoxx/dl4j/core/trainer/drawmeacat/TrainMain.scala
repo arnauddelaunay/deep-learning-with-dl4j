@@ -18,6 +18,7 @@ import org.deeplearning4j.nn.conf.inputs.InputType
 import org.deeplearning4j.nn.conf.layers.{ConvolutionLayer, DenseLayer, OutputLayer, SubsamplingLayer}
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork
 import org.deeplearning4j.nn.weights.WeightInit
+import org.deeplearning4j.optimize.listeners.PerformanceListener
 import org.deeplearning4j.ui.api.UIServer
 import org.deeplearning4j.ui.stats.StatsListener
 import org.deeplearning4j.ui.storage.InMemoryStatsStorage
@@ -56,7 +57,7 @@ object TrainMain {
 
     val testData = new File(TEST_PATH)
     val testSplit = new FileSplit(testData, NativeImageLoader.ALLOWED_FORMATS, randomNumGen)
-    val testRecordReader = new ImageRecordReader(28, 28, 1)
+    val testRecordReader = new ImageRecordReader(HEIGHT, WIDTH, CHANNELS, labelMaker)
     testRecordReader.initialize(testSplit)
     val test = new RecordReaderDataSetIterator(testRecordReader, BATCH_SIZE, 1, NUM_CLASSES)
 
@@ -139,12 +140,13 @@ object TrainMain {
     /////////                                                              /////////
     ////////////////////////////////////////////////////////////////////////////////
 
-    /*val uiServer = UIServer.getInstance
+    val uiServer = UIServer.getInstance
     val statsStorage = new InMemoryStatsStorage()
     uiServer.attach(statsStorage)
     network.setListeners(
-      new StatsListener(statsStorage)
-    )*/
+      new StatsListener(statsStorage),
+      new PerformanceListener(1)
+    )
 
     ////////////////////////////////////////////////////////////////////////////////
     /////////                                                              /////////
