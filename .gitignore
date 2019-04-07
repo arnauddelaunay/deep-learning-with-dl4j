@@ -1,8 +1,4 @@
-logs
-project/project
-project/target
 target
-tmp
 data
 .history
 dist
@@ -19,3 +15,4 @@ dist
 # Explore part
 exploration/dl4j_keras_devoxx19
 exploration/.ipynb_checkpoints
+exploration/data
