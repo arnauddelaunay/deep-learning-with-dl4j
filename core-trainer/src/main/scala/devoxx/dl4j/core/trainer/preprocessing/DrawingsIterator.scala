@@ -12,10 +12,9 @@ import org.nd4j.linalg.dataset.api.preprocessor.ImagePreProcessingScaler
 
 object DrawingsIterator {
 
-  def apply(trainPath: String, testPath: String, imgShape: Seq[Int], numClasses: Int, batchSize: Int, seed: Int = 42):
+  def apply(trainPath: String, testPath: String, height: Int, width: Int, channels: Int, numClasses: Int, batchSize: Int, seed: Int = 42):
   (RecordReaderDataSetIterator, RecordReaderDataSetIterator) = {
     val randomNumGen = new Random(seed)
-    val (height, width, channels) = imgShape: _*
 
     println("Data load...")
     val trainData = new File(trainPath)

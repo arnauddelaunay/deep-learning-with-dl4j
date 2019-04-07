@@ -64,14 +64,6 @@
             <version>${play2.version}</version>
             <scope>test</scope>
         </dependency>
-
-        <!-- required for IntegrationSpec -->
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.2.6</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <build>

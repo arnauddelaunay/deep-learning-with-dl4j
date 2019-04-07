@@ -1,13 +1,6 @@
 package devoxx.dl4j.core.trainer
 
-import java.io.File
-import java.util.Random
-
-import org.datavec.api.io.labels.ParentPathLabelGenerator
-import org.datavec.api.split.FileSplit
-import org.datavec.image.loader.NativeImageLoader
-import org.datavec.image.recordreader.ImageRecordReader
-import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator
+import devoxx.dl4j.core.trainer.preprocessing.DrawingsIterator
 import org.deeplearning4j.earlystopping.EarlyStoppingConfiguration
 import org.deeplearning4j.earlystopping.scorecalc.DataSetLossCalculator
 import org.deeplearning4j.earlystopping.termination.{MaxEpochsTerminationCondition, ScoreImprovementEpochTerminationCondition}
@@ -23,7 +16,6 @@ import org.deeplearning4j.ui.stats.StatsListener
 import org.deeplearning4j.ui.storage.InMemoryStatsStorage
 import org.deeplearning4j.util.ModelSerializer
 import org.nd4j.linalg.activations.Activation
-import org.nd4j.linalg.dataset.api.preprocessor.ImagePreProcessingScaler
 import org.nd4j.linalg.learning.config.Adam
 import org.nd4j.linalg.lossfunctions.LossFunctions
 
@@ -41,29 +33,9 @@ object TrainMainSolution {
 
   def main(args: Array[String]): Unit = {
 
-    val seed = 1234
-    val randomNumGen = new Random(seed)
     val nEpochs = 1
 
-    println("Data load...")
-    val trainData = new File(TRAIN_PATH)
-    val trainSplit = new FileSplit(trainData, NativeImageLoader.ALLOWED_FORMATS, randomNumGen)
-    val labelMaker = new ParentPathLabelGenerator()
-    val trainRecordReader = new ImageRecordReader(HEIGHT, WIDTH, CHANNELS, labelMaker)
-    trainRecordReader.initialize(trainSplit)
-    val train = new RecordReaderDataSetIterator(trainRecordReader, BATCH_SIZE, 1, NUM_CLASSES)
-
-    val testData = new File(TEST_PATH)
-    val testSplit = new FileSplit(testData, NativeImageLoader.ALLOWED_FORMATS, randomNumGen)
-    val testRecordReader = new ImageRecordReader(HEIGHT, WIDTH, CHANNELS, labelMaker)
-    testRecordReader.initialize(testSplit)
-    val test = new RecordReaderDataSetIterator(testRecordReader, BATCH_SIZE, 1, NUM_CLASSES)
-
-    println("Data vectorization...")
-    val imageScaler = new ImagePreProcessingScaler
-    imageScaler.fit(train)
-    train.setPreProcessor(imageScaler)
-    test.setPreProcessor(imageScaler)
+    val (train, test) = DrawingsIterator(TRAIN_PATH, TEST_PATH, HEIGHT, WIDTH, CHANNELS, NUM_CLASSES, BATCH_SIZE)
 
     println("Network configuration and training...")
     val networkConf = new NeuralNetConfiguration.Builder()

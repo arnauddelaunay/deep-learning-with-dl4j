@@ -19,7 +19,7 @@ import org.nd4j.linalg.activations.Activation
 import org.nd4j.linalg.learning.config.Adam
 import org.nd4j.linalg.lossfunctions.LossFunctions
 
-object TrainMainSolution {
+object TrainMain {
 
   val BATCH_SIZE = 256
   val TRAIN_PATH = "exploration/data/labeled_images/train"
@@ -35,7 +35,7 @@ object TrainMainSolution {
 
     val nEpochs = 1
 
-    val (train, test) = DrawingsIterator(TRAIN_PATH, TEST_PATH, Seq(HEIGHT, WIDTH, CHANNELS), NUM_CLASSES, BATCH_SIZE)
+    val (train, test) = DrawingsIterator(TRAIN_PATH, TEST_PATH, HEIGHT, WIDTH, CHANNELS, NUM_CLASSES, BATCH_SIZE)
 
     println("Network configuration and training...")
     val networkConf = new NeuralNetConfiguration.Builder()
