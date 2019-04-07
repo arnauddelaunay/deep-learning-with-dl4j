@@ -6,10 +6,6 @@
 GET     /                           controllers.Application.index
 
 # Model demo
-GET     /IMDB                      controllers.IMDBEndpoint.index
-POST     /IMDB/recognise           controllers.IMDBEndpoint.recognise
-
-# Model demo
 GET     /DRAW                      controllers.DRAWEndpoint.index
 POST     /DRAW/recognise           controllers.DRAWEndpoint.recognise
 

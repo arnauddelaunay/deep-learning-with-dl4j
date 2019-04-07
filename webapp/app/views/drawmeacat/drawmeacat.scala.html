@@ -77,13 +77,6 @@
                 All the code is available <a href="https://github.com/arnauddelaunay/devoxx-dl4J-demo">here</a>
             </p>
 
-            <h3>I drew a cat and it thought it was a car</h3>
-
-            <p>
-                This model is not perfect, far from it.
-                But you can fork this repo and try to train your own model !
-            </p>
-
         </div>
 
     </div>
@@ -242,9 +235,9 @@
                     if (value > 0.1) colour = "text-red";
                     if (value > 0.4) colour = "text-orange";
                     if (value > 0.6) colour = "text-green";
-                    var bold = ""
-                    if (i == s.recognised) bold = "text-bold"
-                    $("#probs").append("<li class='" + colour + " " + bold + "'>" + i + " - " + ((value) * 100).toFixed(2) + "%</li>")
+                    var bold = "";
+                    if (i == s.classIndex) bold = "text-bold";
+                    $("#probs").append("<li class='" + colour + " " + bold + "'>" + s.classes[i] + " - " + ((value) * 100).toFixed(2) + "%</li>")
                 }
             })
 
