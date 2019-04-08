@@ -16,3 +16,6 @@ dist
 exploration/dl4j_keras_devoxx19
 exploration/.ipynb_checkpoints
 exploration/data
+
+# Webapp
+webapp/logs

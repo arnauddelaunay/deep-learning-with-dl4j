@@ -10,6 +10,9 @@ object DRAWEndpoint extends Controller {
   val defaultBody = s"""{"image": [$zeros]}"""
 
   val classes: Seq[String] = Seq("airplane", "bicycle", "cat", "chair", "cup", "ladder", "snake", "star", "sun", "table")
+  val emojis: Map[String, String] = Map("airplane" -> "✈️", "bicycle" -> "\uD83D\uDEB2", "cat" -> "\uD83D\uDC08",
+    "chair" -> "\uD83D\uDCBA", "cup" -> "☕", "ladder" -> "\uD83E\uDDD7", "snake" -> "\uD83D\uDC0D",
+    "star" -> "\uD83C\uDF1F", "sun" -> "☀️", "table" -> "┳━┳")
 
   def index = Action {
 
@@ -28,7 +31,8 @@ object DRAWEndpoint extends Controller {
       "classIndex" -> recognise._1,
       "recognised" -> classes(recognise._1),
       "results" -> recognise._2,
-      "classes" -> classes
+      "classes" -> classes,
+      "emojis" -> emojis
     )))
   }
 

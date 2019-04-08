@@ -41,45 +41,59 @@
                 font-size: 4vw;
             }
 
+            ul {
+                list-style-type: none;
+            }
+
+            .vertical-center {
+                margin-top: 100px;
+                margin-bottom: 100px;
+                font-size: 50px;
+            }
+
 
     </style>
 
     <div class="row center">
-        <div class="col-sm-12">
-            <h1>Draw-me-a-cat Trained Model</h1>
-            <h3>Handmade drawings recogniser</h3>
+        <h1>Draw Me A Cat !</h1>
+        <h3>Drawings recogniser</h3>
+    </div>
+
+    <div class="row center">
+        <div class="col-md-4 col-sm-12">
+
+            <h4>Confidences</h4>
+            <ul id="probs"></ul>
+            <canvas width="28" height="28" id="destCanv"></canvas>
+        </div>
+        <div class="col-md-4 col-sm-12">
             <div class="canvas-area">
                 <canvas width="280" height="280" style="border: dashed" id="main-canvas"></canvas><br/>
             </div><br/>
             <button onclick="clearArea()">Clear</button>
-
+        </div>
+        <div class="col-md-4 col-sm-12">
+            <h3><span id="value-rec">Draw something</span></h3>
+            <div class="vertical-center">
+                <h1><span id="value-emoji"></span></h1>
+            </div>
         </div>
     </div>
+
     <div class="row">
-        <div class="col-md-6 col-sm-12">
-            <h3>That is a <span id="value-rec">-</span></h3>
-            <h3>Confidences</h3>
-            <ul id="probs"></ul>
-            <canvas width="28" height="28" id="destCanv"></canvas>
-        </div>
-        <div class="col-md-6 col-sm-12">
-            <h3>Project Information</h3>
-            <p>
-                This project uses Deep Learning for Java (DL4J) to power a simple multi-layered convolutional network. This model has been trained on the Google "Quick, Draw!" dataset and achieves an accuracy of ~95%
-                with the test set. I used the play framework and got inspired to build the app by <a href="https://github.com/vogon101/MachineLearning">this project</a>.
-            </p>
-
-            <p>
-                To use this example draw a <b>cat</b> in the box for example and then click send. <b>On mobile this site only works when the zoom level is 100%.</b>
-            </p>
-
-            <p>
-                All the code is available <a href="https://github.com/arnauddelaunay/devoxx-dl4J-demo">here</a>
-            </p>
-
-        </div>
-
+        <h4>Project Information</h4>
+        <p>
+            This project uses Deep Learning for Java (DL4J) to power a simple multi-layered convolutional network. This model has been trained on the Google "Quick, Draw!" dataset and achieves an accuracy of ~95%
+            with the test set. I used the play framework and got inspired to build the app by <a href="https://github.com/vogon101/MachineLearning">this project</a>.
+        </p>
+        <p>
+            To use this example draw a <b>cat</b> in the box for example and see what happens.
+        </p>
+        <p>
+            All the code is available <a href="https://github.com/arnauddelaunay/devoxx-dl4J-demo">here</a>
+        </p>
     </div>
+
 }
 
 <script>
@@ -112,7 +126,7 @@
         var mousePressed = false;
         var lastX, lastY;
         var ctx;
-        var width = 20;
+        var width = 10;
         var canvas = $("#main-canvas");
         var destCtx = document.getElementById("destCanv").getContext("2d");
         var canvasElement = document.getElementById("main-canvas")
@@ -227,7 +241,8 @@
             recognise(image, function (s) {
                 console.log(s);
                 var maxValue = (Math.max.apply(null, s.results) * 100).toFixed(2)
-                $("#value-rec").html(s.recognised + " (" + maxValue + "%)");
+                $("#value-rec").html("This is a " + s.recognised + " (" + maxValue + "%)");
+                $("#value-emoji").html(s.emojis[s.recognised]);
                 $("#probs").html("");
                 for (i = 0; i < s.results.length; i++) {
                     var value = s.results[i];
