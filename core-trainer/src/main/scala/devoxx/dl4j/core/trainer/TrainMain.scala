@@ -22,10 +22,10 @@ import org.nd4j.linalg.lossfunctions.LossFunctions
 object TrainMain {
 
   val BATCH_SIZE = 256
-  val TRAIN_PATH = "exploration/data/labeled_images/train"
-  val TEST_PATH = "exploration/data/labeled_images/test"
+  val TRAIN_PATH = "data/images/train"
+  val TEST_PATH = "data/images/test"
   val NUM_CLASSES = 10
-  val OUTPUT_PATH = "data/models/drawingNet_v2.zip"
+  val OUTPUT_PATH = "data/models/drawingNet.zip"
 
   val HEIGHT = 28
   val WIDTH = 28
@@ -33,7 +33,7 @@ object TrainMain {
 
   def main(args: Array[String]): Unit = {
 
-    val nEpochs = 1
+    val nEpochs = 5
 
     val (train, test) = DrawingsIterator(TRAIN_PATH, TEST_PATH, HEIGHT, WIDTH, CHANNELS, NUM_CLASSES, BATCH_SIZE)
 
@@ -93,7 +93,7 @@ object TrainMain {
 
     // evaluation while training (the score should go down)// evaluation while training (the score should go down)
 
-    /*var i = 0
+    var i = 0
     while ( i < nEpochs ) {
       network.fit(train)
       println(s"Completed epoch $i")
@@ -102,7 +102,7 @@ object TrainMain {
       train.reset()
       test.reset()
       i += 1
-    }*/
+    }
 
     ////////////////////////////////////////////////////////////////////////////////
     /////////                                                              /////////
@@ -110,7 +110,7 @@ object TrainMain {
     /////////                                                              /////////
     ////////////////////////////////////////////////////////////////////////////////
 
-    val uiServer = UIServer.getInstance
+    /*val uiServer = UIServer.getInstance
     val statsStorage = new InMemoryStatsStorage()
     uiServer.attach(statsStorage)
     network.setListeners(
@@ -141,8 +141,8 @@ object TrainMain {
 
     val result = trainer.fit()
     val bestModel = result.getBestModel
-
-    ModelSerializer.writeModel(bestModel, OUTPUT_PATH, true)
+    */
+    ModelSerializer.writeModel(network, OUTPUT_PATH, true)
   }
 
 }

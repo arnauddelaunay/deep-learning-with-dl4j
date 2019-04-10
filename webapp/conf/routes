@@ -6,8 +6,10 @@
 GET     /                           controllers.Application.index
 
 # Model demo
-GET     /DRAW                      controllers.DRAWEndpoint.index
-POST     /DRAW/recognise           controllers.DRAWEndpoint.recognise
+GET     /DRAW                       controllers.DRAWEndpoint.index
+POST    /DRAW/recognise             controllers.DRAWEndpoint.recognise
+GET     /DRAW/reload                controllers.DRAWEndpoint.reload
+GET     /DRAW/reload-best           controllers.DRAWEndpoint.reloadBest
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

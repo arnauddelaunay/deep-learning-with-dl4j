@@ -55,8 +55,16 @@
     </style>
 
     <div class="row center">
-        <h1>Draw Me A Cat !</h1>
-        <h3>Drawings recogniser</h3>
+        <div class="col-md-4 col-sm-12">
+        </div>
+        <div class="col-md-4 col-sm-12">
+            <h1>Draw Me A Cat !</h1>
+            <h3>Drawings recogniser</h3>
+        </div>
+        <div class="col-md-4 col-sm-12">
+            <button onclick="reloadModel(false)">Reload Model</button>
+            <button onclick="reloadModel(true)">Restore Best Model</button>
+        </div>
     </div>
 
     <div class="row center">
@@ -256,6 +264,19 @@
                 }
             })
 
+        }
+
+        function reloadModel(best) {
+            var url = best ? "DRAW/reload-best" : "DRAW/reload";
+            $.ajax({
+                url: url,
+                method: "GET"
+            }).done(function(r) {
+                console.log(r);
+            }).fail(function(e) {
+                alert(e.responseText);
+                console.log("ERROR");
+            })
         }
 
 

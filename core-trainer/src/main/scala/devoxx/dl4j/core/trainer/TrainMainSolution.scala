@@ -22,8 +22,8 @@ import org.nd4j.linalg.lossfunctions.LossFunctions
 object TrainMainSolution {
 
   val BATCH_SIZE = 256
-  val TRAIN_PATH = "exploration/data/labeled_images/train"
-  val TEST_PATH = "exploration/data/labeled_images/test"
+  val TRAIN_PATH = "data/images/train"
+  val TEST_PATH = "data/images/test"
   val NUM_CLASSES = 10
   val OUTPUT_PATH = "data/models/drawingNet_v2.zip"
 
