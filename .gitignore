@@ -1,8 +1,4 @@
-logs
-project/project
-project/target
 target
-tmp
 data
 .history
 dist
@@ -15,3 +11,11 @@ dist
 /.project
 /RUNNING_PID
 /.settings
+
+# Explore part
+exploration/dl4j_keras_devoxx19
+exploration/.ipynb_checkpoints
+exploration/data
+
+# Webapp
+webapp/logs

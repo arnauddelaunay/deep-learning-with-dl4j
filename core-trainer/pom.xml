@@ -52,6 +52,13 @@
             <artifactId>nd4j-native-platform</artifactId>
             <version>1.0.0-beta3</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.scalatest</groupId>
+            <artifactId>scalatest_2.10</artifactId>
+            <version>3.0.7</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
