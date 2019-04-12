@@ -37,72 +37,6 @@ object TrainMain {
 
     val (train, test) = DrawingsIterator(TRAIN_PATH, TEST_PATH, HEIGHT, WIDTH, CHANNELS, NUM_CLASSES, BATCH_SIZE)
 
-    println("Network configuration and training...")
-    val networkConf = new NeuralNetConfiguration.Builder()
-      .weightInit(WeightInit.XAVIER)
-      .updater(new Adam(1e-3))
-      .list
-      .layer(new ConvolutionLayer.Builder(3, 3)
-          .nIn(1)
-          .nOut(16)
-          .stride(1, 1)
-          .activation(Activation.RELU)
-          .build
-      )
-      .layer(new SubsamplingLayer.Builder(SubsamplingLayer.PoolingType.MAX)
-          .kernelSize(2, 2)
-        .build
-      )
-      .layer(new ConvolutionLayer.Builder(3, 3)
-        .nOut(32)
-        .stride(1, 1)
-        .activation(Activation.RELU)
-        .build
-      )
-      .layer(new SubsamplingLayer.Builder(SubsamplingLayer.PoolingType.MAX)
-        .kernelSize(2, 2)
-        .build
-      )
-      .layer(new ConvolutionLayer.Builder(3, 3)
-        .nOut(64)
-        .stride(1, 1)
-        .activation(Activation.RELU)
-        .build
-      )
-      .layer(new SubsamplingLayer.Builder(SubsamplingLayer.PoolingType.MAX)
-        .kernelSize(2, 2)
-        .build
-      )
-      .layer(new DenseLayer.Builder()
-          .nOut(128)
-          .activation(Activation.RELU)
-          .build
-      )
-      .layer(new OutputLayer.Builder()
-          .nOut(NUM_CLASSES)
-          .activation(Activation.SOFTMAX)
-          .lossFunction(LossFunctions.LossFunction.MCXENT)
-          .build
-      )
-      .setInputType(InputType.convolutionalFlat(HEIGHT, WIDTH, CHANNELS))
-      .build
-
-    val network = new MultiLayerNetwork(networkConf)
-    network.init()
-    println(s"Total num of params: ${network.numParams}")
-
-    // evaluation while training (the score should go down)// evaluation while training (the score should go down)
-
-    var i = 0
-    while ( i < nEpochs ) {
-      network.fit(train)
-      println(s"Completed epoch $i")
-      //val eval = network.evaluate(test)
-      //println(eval.toString)
-      train.reset()
-      test.reset()
-      i += 1
-    }
 
     ////////////////////////////////////////////////////////////////////////////////
     /////////                                                              /////////
@@ -110,28 +44,14 @@ object TrainMain {
     /////////                                                              /////////
     ////////////////////////////////////////////////////////////////////////////////
 
-    /*val uiServer = UIServer.getInstance
-    val statsStorage = new InMemoryStatsStorage()
-    uiServer.attach(statsStorage)
-    network.setListeners(
-      new StatsListener(statsStorage),
-      new PerformanceListener(1)
-    )
 
     ////////////////////////////////////////////////////////////////////////////////
     /////////                                                              /////////
     /////////                      EARLY STOPPING                          /////////
     /////////                                                              /////////
     ////////////////////////////////////////////////////////////////////////////////
-    val earlyStopConf = new EarlyStoppingConfiguration.Builder[MultiLayerNetwork]()
-      .epochTerminationConditions(
-        new MaxEpochsTerminationCondition(15),
-        new ScoreImprovementEpochTerminationCondition(5, 1e-3))
-      .scoreCalculator(new DataSetLossCalculator(test, true))
-      .evaluateEveryNEpochs(1)
-      .build
 
-    val trainer = new EarlyStoppingTrainer(earlyStopConf, network, train)
+
 
     ////////////////////////////////////////////////////////////////////////////////
     /////////                                                              /////////
@@ -139,10 +59,8 @@ object TrainMain {
     /////////                                                              /////////
     ////////////////////////////////////////////////////////////////////////////////
 
-    val result = trainer.fit()
-    val bestModel = result.getBestModel
-    */
-    ModelSerializer.writeModel(network, OUTPUT_PATH, true)
+
+    //ModelSerializer.writeModel(network, OUTPUT_PATH, true)
   }
 
 }
