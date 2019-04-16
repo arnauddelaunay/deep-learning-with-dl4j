@@ -1,0 +1,21 @@
+target
+data
+.history
+dist
+/.idea
+*iml
+*/*iml
+/out
+/.idea_modules
+/.classpath
+/.project
+/RUNNING_PID
+/.settings
+
+# Explore part
+exploration/dl4j_keras_devoxx19
+exploration/.ipynb_checkpoints
+exploration/data
+
+# Webapp
+webapp/logs
