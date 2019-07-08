@@ -25,7 +25,7 @@ object TrainMainSolution {
   val TRAIN_PATH = "data/images/train"
   val TEST_PATH = "data/images/test"
   val NUM_CLASSES = 10
-  val OUTPUT_PATH = "data/models/drawingNet_v2.zip"
+  val OUTPUT_PATH = "data/models/drawingNet.zip"
 
   val HEIGHT = 28
   val WIDTH = 28
@@ -106,23 +106,10 @@ object TrainMainSolution {
 
     ////////////////////////////////////////////////////////////////////////////////
     /////////                                                              /////////
-    /////////                         LISTENERS                            /////////
-    /////////                                                              /////////
-    ////////////////////////////////////////////////////////////////////////////////
-
-    val uiServer = UIServer.getInstance
-    val statsStorage = new InMemoryStatsStorage()
-    uiServer.attach(statsStorage)
-    network.setListeners(
-      new StatsListener(statsStorage),
-      new PerformanceListener(1)
-    )
-
-    ////////////////////////////////////////////////////////////////////////////////
-    /////////                                                              /////////
     /////////                      EARLY STOPPING                          /////////
     /////////                                                              /////////
     ////////////////////////////////////////////////////////////////////////////////
+
     val earlyStopConf = new EarlyStoppingConfiguration.Builder[MultiLayerNetwork]()
       .epochTerminationConditions(
         new MaxEpochsTerminationCondition(15),
@@ -141,6 +128,21 @@ object TrainMainSolution {
 
     val result = trainer.fit()
     val bestModel = result.getBestModel
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /////////                                                              /////////
+    /////////                         LISTENERS                            /////////
+    /////////                                                              /////////
+    ////////////////////////////////////////////////////////////////////////////////
+
+    val uiServer = UIServer.getInstance
+    val statsStorage = new InMemoryStatsStorage()
+    uiServer.attach(statsStorage)
+    network.setListeners(
+      new StatsListener(statsStorage),
+      new PerformanceListener(1)
+    )
+
 
     ModelSerializer.writeModel(bestModel, OUTPUT_PATH, true)
   }
