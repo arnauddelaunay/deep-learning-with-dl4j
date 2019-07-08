@@ -62,7 +62,7 @@ object TrainMain {
     ////////////////////////////////////////////////////////////////////////////////
 
 
-    //ModelSerializer.writeModel(bestModel, OUTPUT_PATH, true)
+    //ModelSerializer.writeModel(network, OUTPUT_PATH, true)
   }
 
 }
