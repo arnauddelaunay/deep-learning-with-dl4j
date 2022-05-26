@@ -4,7 +4,7 @@ matplotlib==3.0.2
 ipywidgets==7.4.2
 jupyter_contrib_nbextensions==0.5.1
 jupyter_nbextensions_configurator==0.4.1
-tensorflow==2.0.0a0
+tensorflow==2.7.2
 jupyter-tensorboard==0.1.9
 tensorflow-hub==0.3.0
 
